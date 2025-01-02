@@ -23,6 +23,9 @@ header nav{
   display: flex;
   gap:40px;
 }
+header nav a{
+  cursor: pointer;
+}
 main div.post{
   display:grid;
   grid-template-columns: 0.8fr 1.2fr;

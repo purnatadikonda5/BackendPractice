@@ -6,9 +6,10 @@ import Indexpage from './pages';
 import Layout from './components/layout';
 import LoginPage from './pages/loginpage';
 import RegisterPage from './pages/registerpage';
+import { UserContextProvider } from './components/UserContext';
 function App() {
   return (
-    <>
+    <UserContextProvider>
     <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<Indexpage />}/>
@@ -16,7 +17,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
         </Route>
     </Routes>
-    </>
+     </UserContextProvider>
   )
 }
 
