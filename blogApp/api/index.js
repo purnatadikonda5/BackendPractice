@@ -6,9 +6,11 @@ const jwt = require("jsonwebtoken");
 const UserModel = require('./models/UserModel');
 const bcrypt= require('bcrypt');
 const cookieParser = require('cookie-parser');
+const { upload } = require('./configs/multerconfig');
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
+app.use(express.json());
 const secret="ieobng7we0gjnewapri08ty42iyg208g2480";
 app.use(cors({
     credentials:true,
@@ -59,4 +61,7 @@ app.get("/profile",(req,res)=>{
 })
 app.post("/logout",(req,res)=>{
     res.cookie("token","").json("ok");
+})
+app.post("/post",upload.single("file"),(req,res)=>{
+    console.log('hai');
 })

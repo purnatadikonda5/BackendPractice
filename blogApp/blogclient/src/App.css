@@ -26,6 +26,7 @@ header nav{
 header nav a{
   cursor: pointer;
 }
+
 main div.post{
   display:grid;
   grid-template-columns: 0.8fr 1.2fr;
@@ -78,6 +79,6 @@ form button.form-btn{
   font-size: 1.3rem;
   border-radius:10px;
 }
-form h2{
+form h2.login,h2.register{
   text-align: center;
 }

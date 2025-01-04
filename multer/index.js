@@ -3,6 +3,7 @@ const multer= require("multer");
 const Crypto= require('crypto');
 const path= require('path');
 let app =express();
+app.use(express.static("public"));
 app.listen(8080,()=>console.log("listening at port no. 8080"));
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
