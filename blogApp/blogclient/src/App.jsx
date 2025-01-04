@@ -10,7 +10,6 @@ import { UserContextProvider } from './components/UserContext';
 import { CreatePost } from './pages/createpost';
 function App() {
   return (
-    <UserContextProvider>
     <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<Indexpage />}/>
@@ -19,8 +18,6 @@ function App() {
           <Route path="/create" element={<CreatePost/>} />
         </Route>
     </Routes>
-     </UserContextProvider>
   )
 }
-
 export default App

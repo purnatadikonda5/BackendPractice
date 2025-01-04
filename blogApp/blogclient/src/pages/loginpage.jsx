@@ -1,10 +1,10 @@
 import { useContext, useState } from "react"
-import {Navigate} from "react-router-dom"
+import {Navigate, useNavigate} from "react-router-dom"
 import { UserContext } from "../components/UserContext";
 export default function LoginPage(){ 
     let [username,setusername]= useState('');
     let [password,setpassword]= useState('');
-    let [redirect,setredirect]= useState(false);
+    const navigate= useNavigate();
     let {userinfo,setuserinfo}= useContext(UserContext);
     async function handleSubmit(e){
        e.preventDefault();
@@ -16,16 +16,13 @@ export default function LoginPage(){
        });
        if(response.ok){
            response.json().then(async(res)=>{
-               await setuserinfo(res);
-               setredirect(true);
+            await setuserinfo(res);
+            navigate("/");
             }).catch(e=>console.log(e));
        }
        else{
         alert("wrong Credentials");
        }
-    }
-    if(redirect){
-        return <Navigate to="/"/>
     }
     return (
         <form  className="login" onSubmit={handleSubmit}>

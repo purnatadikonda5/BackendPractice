@@ -10,37 +10,40 @@ export default function Header(){
       credentials:"include",
       method:'POST'
     }).then(async()=>{
-      await setuserinfo(null);
+      await setuserinfo({});
       navigate("/");
       alert("YOU HAVE BEEN LOGGED OUT SUCCESSFULLY");
     }).catch(e=>console.log(err));
   }
-  useEffect(
-    ()=>{
-      fetch("http://localhost:8080/profile",{
-        credentials:"include",
-      }).then(resoponse=>{
-        resoponse.json().then(UserInfo=>setuserinfo(UserInfo));
-      })
-    },[]
-    )
+  // useEffect(
+  //   // ()=>{
+  //   //   fetch("http://localhost:8080/profile",{
+  //   //     credentials:"include",
+  //   //   }).then(response=>{
+  //   //     response.json().then(userinfo=>{setuserinfo(userinfo);});
+  //   //   }).catch(e=>console.log("err is ,",e));
+  //   // },[]
+  //   )
+    let username= false;console.log(userinfo);
+    if(userinfo!=null){username=true}
+    // {console.log(userinfo)}
     return (
         <header>
           <Link to="/" className="logo">MY LOGO</Link>
-          <nav>
-            {(userinfo!=null && userinfo.username!=null) && (
+           <nav>
+              {(Object.keys(userinfo).length === 0) &&(
+                <>
+                  <Link to="/login">Login</Link>
+                  <Link to="/register">Register</Link>
+                </>
+              )}
+            {!(Object.keys(userinfo).length === 0) && (
               <>
                 <Link to="/create">CreateNewPost</Link>
                 <a onClick={logout}>Logout</a>
               </>
             ) }
-            {(userinfo==null) &&(
-              <>
-                <Link to="/login">Login</Link>
-                <Link to="/register">Register</Link>
-              </>
-            )}
-          </nav>
+          </nav> 
         </header>
     )
 }

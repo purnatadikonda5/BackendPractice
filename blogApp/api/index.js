@@ -7,6 +7,7 @@ const UserModel = require('./models/UserModel');
 const bcrypt= require('bcrypt');
 const cookieParser = require('cookie-parser');
 const { upload } = require('./configs/multerconfig');
+const PostModel = require('./models/PostModel');
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
@@ -50,8 +51,11 @@ app.post("/login",async(req,res)=>{
     else res.status(400).json("sorry something went wrong");
 });
 app.get("/profile",(req,res)=>{
+    console.log(req.cookies);
+    console.log("hai");
     let {token}= req.cookies;
-    if(token=='')res.json(null);
+    console.log("token",token);
+    if(token=='' || token==undefined)res.json("null");
     else{
         jwt.verify(token,secret,{},(err,data)=>{
             if(err)throw err;
@@ -62,6 +66,18 @@ app.get("/profile",(req,res)=>{
 app.post("/logout",(req,res)=>{
     res.cookie("token","").json("ok");
 })
-app.post("/post",upload.single("file"),(req,res)=>{
-    console.log('hai');
+app.post("/post",upload.single("file"),async(req,res)=>{
+    let {title,content,summary}= req.body;
+    let newpost= await PostModel.create({
+        title,
+        content,
+        summary,
+        cover:req.file.filename
+    });
+    newpost.save();
+    res.json(newpost);
+})
+app.get("/post",async (req,res)=>{
+    let posts= await PostModel.find();
+    res.json(posts);
 })
