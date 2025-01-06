@@ -4,7 +4,11 @@ let PostSchema= mongoose.Schema({
     title:String,
     summary:String,
     content:String,
-    Cover:String
+    Cover:String,
+    author:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"UserModel"
+    }
 },{
     timestamps:true
 })

@@ -11,6 +11,7 @@ const PostModel = require('./models/PostModel');
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
+app.use(express.static(__dirname+"/public"));
 app.use(express.json());
 const secret="ieobng7we0gjnewapri08ty42iyg208g2480";
 app.use(cors({
@@ -40,22 +41,19 @@ app.post("/register",(req,res)=>{
 app.post("/login",async(req,res)=>{
     let {username,password}= req.body;
     let User= await UserModel.findOne({Username:username});
-    console.log(username,password,User);
     if(User !=undefined && bcrypt.compareSync(password,User.Password)){
         let token=jwt.sign({username,id:User._id},secret);
         res.cookie("token",token).json({
             id:User._id,
-            username:User.username
+            username:username
         }).status(200);
     }
     else res.status(400).json("sorry something went wrong");
 });
 app.get("/profile",(req,res)=>{
-    console.log(req.cookies);
-    console.log("hai");
     let {token}= req.cookies;
-    console.log("token",token);
-    if(token=='' || token==undefined)res.json("null");
+    // console.log("token",token);
+    if(token=='' || token==undefined)res.json({});
     else{
         jwt.verify(token,secret,{},(err,data)=>{
             if(err)throw err;
@@ -68,16 +66,30 @@ app.post("/logout",(req,res)=>{
 })
 app.post("/post",upload.single("file"),async(req,res)=>{
     let {title,content,summary}= req.body;
-    let newpost= await PostModel.create({
-        title,
-        content,
-        summary,
-        cover:req.file.filename
+    let {token}= req.cookies;
+    jwt.verify(token,secret,{},async(err,data)=>{
+        if(err)throw err;
+        else {
+            let newpost= await PostModel.create({
+                title,
+                content,
+                summary,
+                Cover:req.file.filename,
+                author:data.id
+            });
+            newpost.save();
+            res.json(newpost);
+        } 
     });
-    newpost.save();
-    res.json(newpost);
 })
 app.get("/post",async (req,res)=>{
-    let posts= await PostModel.find();
+    let posts= await PostModel.find().populate('author',['Username']).sort({createdAt:-1}).limit(20);
+    console.log(posts);
     res.json(posts);
+})
+app.get('/post/:id',async(req,res)=>{
+    let {id}= req.params;
+    let post= await PostModel.findById(id).populate('author',['Username']);
+    // console.log(post);
+    res.json(post);
 })

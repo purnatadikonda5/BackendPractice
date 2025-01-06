@@ -36,6 +36,7 @@ export function CreatePost(){
         const res=await fetch("http://localhost:8080/post",{
             method:'POST',
             body: data,
+            credentials:"include"
         });
        if(res.ok){
             setredirect(true);

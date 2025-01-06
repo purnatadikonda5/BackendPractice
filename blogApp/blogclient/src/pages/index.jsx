@@ -10,7 +10,7 @@ export default function Indexpage(){
     },[])
     return (
         <>
-        <Post />
+        {/* <Post /> */}
             {((Object.keys(posts).length >0)) &&(
                 posts.map(post=>(
                     <Post {...post}/>

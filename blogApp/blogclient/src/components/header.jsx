@@ -15,29 +15,27 @@ export default function Header(){
       alert("YOU HAVE BEEN LOGGED OUT SUCCESSFULLY");
     }).catch(e=>console.log(err));
   }
-  // useEffect(
-  //   // ()=>{
-  //   //   fetch("http://localhost:8080/profile",{
-  //   //     credentials:"include",
-  //   //   }).then(response=>{
-  //   //     response.json().then(userinfo=>{setuserinfo(userinfo);});
-  //   //   }).catch(e=>console.log("err is ,",e));
-  //   // },[]
-  //   )
-    let username= false;console.log(userinfo);
-    if(userinfo!=null){username=true}
-    // {console.log(userinfo)}
+  {console.log("userinfo",userinfo);}
+  useEffect(()=>{
+    console.log("fetching");
+    fetch("http://localhost:8080/profile",{
+      credentials:"include"
+    }).then(res=>{
+      res.json().then(ress=>setuserinfo(ress))
+    }).catch(e=>console.log("err",e))
+  },[])
+  {console.log("baya",userinfo)}
     return (
         <header>
           <Link to="/" className="logo">MY LOGO</Link>
            <nav>
-              {(Object.keys(userinfo).length === 0) &&(
+              {((Object.keys(userinfo).length === 0) || (userinfo==null)) &&(
                 <>
                   <Link to="/login">Login</Link>
                   <Link to="/register">Register</Link>
                 </>
               )}
-            {!(Object.keys(userinfo).length === 0) && (
+            {(!(Object.keys(userinfo).length === 0) && (userinfo!=null)) && (
               <>
                 <Link to="/create">CreateNewPost</Link>
                 <a onClick={logout}>Logout</a>
