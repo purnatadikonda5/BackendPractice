@@ -84,7 +84,7 @@ app.post("/post",upload.single("file"),async(req,res)=>{
 })
 app.get("/post",async (req,res)=>{
     let posts= await PostModel.find().populate('author',['Username']).sort({createdAt:-1}).limit(20);
-    console.log(posts);
+    // console.log(posts);
     res.json(posts);
 })
 app.get('/post/:id',async(req,res)=>{
@@ -92,4 +92,27 @@ app.get('/post/:id',async(req,res)=>{
     let post= await PostModel.findById(id).populate('author',['Username']);
     // console.log(post);
     res.json(post);
+})
+app.put("/post",upload.single("file"),async(req,res)=>{
+    let {title,summary,content,id}= req.body;
+    let currpost= await PostModel.findById(id);
+    let {token}= req.cookies;
+    jwt.verify(token,secret,{},async(err,data)=>{
+        if(err)throw err;
+        else {
+            console.log(data,currpost);
+            if(data.id==currpost.author._id){
+                let file=currpost.Cover;
+                if(req.file)file=req.file.filename;
+                await PostModel.findByIdAndUpdate(id,{
+                    title,
+                    summary,
+                    content,
+                    Cover:file
+                });
+                res.json("ok");
+            }
+            else res.status(400).json("you are not allowed to edit this post");
+        } 
+    });
 })

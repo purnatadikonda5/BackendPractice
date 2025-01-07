@@ -118,6 +118,9 @@ main div.postpage div.image{
   border-radius: 30px;
   margin: 10px 0 40px 0;
 }
+button{
+  cursor:pointer;
+}
 main div.postpage a{
   color:#111;
   font-size: 1.3rem;
@@ -146,4 +149,20 @@ main div.postpage div.author{
 main div.postpage p{
   line-height: 1.9rem;
   
+}
+.editbtnbox{
+  position: relative;
+  left:70%;
+}
+.editbtn{
+  text-align: center;
+  display:block;
+  width:30%;
+  border: 0;
+  margin-bottom: 7px;
+  padding: 10px 20px;
+  background-color: #101010;
+  color:aliceblue;
+  font-size: 1.3rem;
+  border-radius:10px;
 }

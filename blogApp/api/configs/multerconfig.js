@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
       crypto.randomBytes(12,function (err,bytes){
       cb(null, bytes.toString("hex")+path.extname(file.originalname));
       })
-       }
+      }
   })
 const upload = multer({ storage: storage })
 module.exports={upload};
