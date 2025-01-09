@@ -21,14 +21,14 @@ io.on("connection",(uniquesocket)=>{
     console.log("connected");
     if(!players.white){
         players.white=uniquesocket.id;
-        uniquesocket.emit("PLAYER ROLE : ","w")
+        uniquesocket.emit("playerRole","w")
     }
     else if(!players.black){
         players.black=uniquesocket.id;
-        uniquesocket.emit("PLAYER ROLE : ","b")
+        uniquesocket.emit("playerRole","b")
     }
     else{
-        uniquesocket.emit("PLAYER ROLE : ","SPECTATOR");
+        uniquesocket.emit("SpectatorRole");
     }
     uniquesocket.on("disconnect",()=>{
         if(uniquesocket.id==players.white){
@@ -40,9 +40,10 @@ io.on("connection",(uniquesocket)=>{
     })
     uniquesocket.on("move",(move)=>{
         try {
-            if(chess.turn()=='w' && uniquesocket.id==players.white)return;
-            if(chess.turn()=='b' && uniquesocket.id==players.black)return;
+            if(chess.turn()=='w' && uniquesocket.id!=players.white)return;
+            if(chess.turn()=='b' && uniquesocket.id!=players.black)return;
             let result= chess.move(move);
+            console.log(result);
             if(result){
                 CurrentPlayer=chess.turn();
                 io.emit("move",move);
